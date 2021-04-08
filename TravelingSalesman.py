@@ -78,7 +78,7 @@ def OptProblem(CostMatrix) -> Problem:
                 if i!=j and i<j:                        # i<j because we don't want to penalize twice // i==j is forbidden (above)
                     terms.append(
                         Term(
-                            c = int(10*np.max(CostMatrix)),                                     # assign a constant weight penalty dependent on cost matrix elements
+                            c = int(10*np.linalg.norm(CostMatrix, ord='fro')),                                     # assign a constant weight penalty dependent on cost matrix elements
                             indices = [i+(len(CostMatrix)*l),j+(len(CostMatrix)*l)]                   
                         )
                     )
@@ -91,7 +91,7 @@ def OptProblem(CostMatrix) -> Problem:
     for v in range(0,len(CostMatrix)+len(CostMatrix)*(len(CostMatrix))):    # Select variable (v represents a node before/after any trip)
         terms.append(
             Term(
-                c = int(-2*np.max(CostMatrix)),
+                c = int(-2*np.linalg.norm(CostMatrix, ord='fro')),
                 indices = [v]   
             )
         )
@@ -106,7 +106,7 @@ def OptProblem(CostMatrix) -> Problem:
         for f in range(p+len(CostMatrix),len(CostMatrix)*(len(CostMatrix)),len(CostMatrix)):              # This selects the same node x but after upcoming trips: 'f' for future
             terms.append(
                 Term(
-                    c =int(5*np.max(CostMatrix)),
+                    c =int(5*np.linalg.norm(CostMatrix, ord='fro')),
                     indices = [p,f]   
                 )
             )     
@@ -120,7 +120,7 @@ def OptProblem(CostMatrix) -> Problem:
     ##### Begin at x0
     terms.append(
         Term(
-            c = int(-5*np.max(CostMatrix)),
+            c = int(-5*np.linalg.norm(CostMatrix, ord='fro')),
             indices = [0]   
         )
     )
@@ -129,7 +129,7 @@ def OptProblem(CostMatrix) -> Problem:
     ##### End at x0
     terms.append(
         Term(
-            c = int(-5*np.max(CostMatrix)),
+            c = int(-5*np.linalg.norm(CostMatrix, ord='fro')),
             indices = [len(CostMatrix)*(len(CostMatrix))]   
         )    
     )
